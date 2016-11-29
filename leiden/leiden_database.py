@@ -591,7 +591,13 @@ class _LOVD3GeneData(GeneData):
                     link_string = re.sub(r'\s', '', link_string)  # ensure there is no whitespace
                     entries.append(link_string)
                 else:
-                    column_string = columns.string.strip()
+                    try:
+                        column_string = columns.string.strip()
+                    except AttributeError:
+                        # sometimes columns.string is None, apparently when the first child is not text
+                        # if it's NoneType, calling .strip() on it is an AttributeError
+                        column_string = columns.text.strip()
+
                     column_string = re.sub(r'\s', ' ', column_string)  # ensure there is no non-space whitespace
                     entries.append(column_string)
             row_entries.append(entries)
